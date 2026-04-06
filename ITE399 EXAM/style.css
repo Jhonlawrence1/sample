@@ -1,0 +1,340 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Miniver&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: poppins, sans-serif;
+  font-style: italic;
+}
+
+.login-form {
+  position: relative;
+  min-height: 100vh;
+  z-index: 0;
+  background-image: url("pexels-nicole-avagliano-1132392-2312040.jpg");
+  background-size: cover;      
+  background-position: center;  
+  background-repeat: no-repeat; 
+  padding: 30px;
+  justify-content: center;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  align-items: center;
+}
+
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.login-form h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #fff;
+  
+}
+
+.login-form input {
+  outline: auto;
+  margin-bottom: 15px;
+  font-stretch: 16px;
+  color: #333; 
+  text-align: left;
+  padding: 14px 20px;
+  width: 100%;
+  display: inline-block;
+  box-sizing: border-box;
+  border: none;
+  transition: 0.3s ease;
+}
+
+.login-form input:focus {
+  color: white; 
+  border: 2px solid #4e34b6; 
+  box-shadow: 0 0 0 3px rgba(78, 52, 182, 0.1);
+}
+
+.login-form input::placeholder {
+  color: #666;
+  opacity: 1;
+}
+
+.login-form input:focus::placeholder {
+  color: transparent;
+}
+
+.login-form img {
+  line-height: 40px;
+  margin-bottom: 5px;
+  font-size: 30px;
+  font-size: 500;
+  color: #fff;
+  text-align: center;
+  
+}
+
+.login-form .main {
+  position: relative;
+  display: flex;
+  margin: 30px 0;
+}
+
+.content {
+  flex-basis: 50%;
+  padding: 3em 3em;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(255, 2, 255, 0.3));
+  box-shadow: 2px 9px 49px -17 rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.form-img {
+  flex-basis: 50%;
+  background: rgba(255, 255, 255, 0.30);
+  background-size: cover;
+  padding: 40px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 1px;
+  align-items: center;
+  display: grid;
+  
+}
+
+.form-img img {
+  max-width: 100%;
+}
+
+p {
+  color: white;
+  font-size: 16px;
+  line-height: 25px;
+  opacity: 0.8;
+  text-align: center;
+}
+
+.btn,button,input{
+  border-radius: 35px;
+}
+
+.btn:hover,button:hover{
+  transition: 0.5s ease;
+  background: #71017b;
+  color: white;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+}
+.login-form form{
+  margin: 30px 0;
+}
+
+.login-form input {
+ outline: auto;
+ margin-bottom: 15px;
+ font-stretch: 16px;
+ color: #999;
+ text-align: left;
+ padding: 14px 20px;
+ width: 100%;
+ display: inline-block;
+ box-sizing: border-box;
+ border: none;
+ transition: 0.3s ease;
+}
+
+.login-form input:focus {
+  background: transparent;
+  border: 1px solid #4e34b6;
+}
+
+.login-form button {
+  font-size: 18px;
+  color: #fff;
+  width: 100%;
+  background: #4e34b6;
+  border: none;
+  padding: 14px 15px;
+  font-weight: 600;
+  transition: 0.3s ease;
+}
+
+p .account a {
+   color: #4e34b6;
+}
+
+p .account a:hover {
+  text-decoration: underline;
+}
+
+.login-form a {
+  color: #fff;
+  font-weight: 600;
+  padding: 1px 2px;
+  border-radius: 30px;
+  transition: 0.3s ease;
+}
+.login-form a:hover {
+ background-color: #4e34b6;
+  color: white;
+}
+
+@media (max-width: 736px) {
+  .login-form .main {
+    flex-direction: column;
+  }
+
+  .login-form form {
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+
+  .form-img {
+    border-radius: 0px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    order: 2;
+  }
+
+  .content {
+    order: 1;
+    border-radius: 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+}
+
+.back {
+  text-align: center;
+  margin-top: 20px;
+  border-color: #4e34b6;
+  font-family: sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.back a {
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: 0.3s ease;
+}
+
+.back a:hover {
+  background-color: #4e34b6;
+  color: white;
+}
+
+/* ===== SMALL SOCIAL SECTION ===== */
+.social-section {
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin: 15px auto;
+  max-width: 190px;
+}
+
+.social-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Brand-specific gradients */
+.social-icon[href*="linkedin"] {
+  background: linear-gradient(45deg, #0077b5, #005582);
+}
+
+.social-icon[href*="linkedin"]:hover {
+  background: linear-gradient(45deg, #0077b5, #006699);
+  box-shadow: 0 8px 20px rgba(0, 119, 181, 0.4);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.social-icon[href*="github"] {
+  background: linear-gradient(45deg, #333, #24292e);
+}
+
+.social-icon[href*="github"]:hover {
+  background: linear-gradient(45deg, #24292e, #1a1f24);
+  box-shadow: 0 8px 20px rgba(36, 41, 46, 0.4);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.social-icon[href*="facebook"] {
+  background: linear-gradient(45deg, #1877f2, #0e5a8a);
+}
+
+.social-icon[href*="facebook"]:hover {
+  background: linear-gradient(45deg, #1877f2, #0e5a8a);
+  box-shadow: 0 8px 20px rgba(24, 119, 242, 0.4);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.social-icon[href*="instagram"] {
+  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+.social-icon[href*="instagram"]:hover {
+  box-shadow: 0 8px 20px rgba(225, 48, 108, 0.4);
+  transform: translateY(-2px) scale(1.08) rotate(3deg);
+}
+
+/* Responsive for small screens */
+@media (max-width: 736px) {
+  .social-section {
+    gap: 8px;
+    padding: 10px 15px;
+    max-width: 240px;
+  }
+  
+  .social-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .social-section {
+    padding: 8px 12px;
+    max-width: 150px;
+  }
+  
+  .social-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+}
