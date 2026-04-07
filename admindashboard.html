@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BHC Admin Dashboard</title>
+  <link rel="stylesheet" href="admin-dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="icon" type="image/png" href="Copilot_20260329_121355 copy.png">
+</head>
+<body>
+
+  <input type="checkbox" id="mobile-menu-toggle" class="menu-toggle-input">
+
+
+  <div class="sidebar-overlay"></div>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <i class="fas fa-heartbeat"></i>
+        <span>BHC Admin</span>
+      </div>
+    </div>
+
+  <ul class="nav-menu" id="navMenu">
+  <li><a href="#dashboard" class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+  <li><a href="#appointments" class="nav-item"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+  <li><a href="#patients" class="nav-item"><i class="fas fa-users"></i> Patients</a></li>
+  <li><a href="#services" class="nav-item"><i class="fas fa-clinic-medical"></i> Services</a></li>
+  <li><a href="#reports" class="nav-item"><i class="fas fa-chart-bar"></i> Reports</a></li>
+</ul>
+
+    <div class="logout">
+      <a href="index.html">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+<button class="menu-toggle">
+  <label for="mobile-menu-toggle" class="mobile-menu-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+</button>
+
+  <div class="main-content">
+    <div class="topbar">
+      <div style="display: flex; gap: 16px;">
+        <h1>Dashboard</h1>
+      </div>
+      <div class="profile">
+        <div class="profile-avatar"></div>
+        <span>Admin</span>
+      </div>
+    </div>
+
+    <div class="content-section">
+      <section id="dashboard" class="content-panel">
+        <div class="stats-grid">
+          <div class="stat-card primary">
+            <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+            <div>
+              <div class="stat-number">47</div>
+              <div class="stat-label">Today's Appointments</div>
+              <div class="stat-change positive">+12% from yesterday</div>
+            </div>
+          </div>
+          <div class="stat-card success">
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
+            <div>
+              <div class="stat-number">1,247</div>
+              <div class="stat-label">Total Patients</div>
+              <div class="stat-change positive">+8% this month</div>
+            </div>
+          </div>
+          <div class="stat-card warning">
+            <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+            <div>
+              <div class="stat-number">23</div>
+              <div class="stat-label">Active Doctors</div>
+              <div class="stat-change neutral">Stable</div>
+            </div>
+          </div>
+          <div class="stat-card danger">
+            <div class="stat-icon"><i class="fas fa-file-medical"></i></div>
+            <div>
+              <div class="stat-number">$14,750</div>
+              <div class="stat-label">Monthly Revenue</div>
+              <div class="stat-change positive">+15% from last month</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-row">
+          <div class="card">
+            <div class="card-header">
+              <h3>Recent Appointments</h3>
+              <a href="#appointments" class="view-all">View All →</a>
+            </div>
+            <div class="table-responsive">
+              <table class="activity-table">
+                <thead>
+                  <tr>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Jharyl Rufino</td>
+                    <td>Dr. Sarah Johnson</td>
+                    <td>10:30 AM</td>
+                    <td><span class="status completed">Completed</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="appointments" class="content-panel">
+        <div class="content-row">
+          <div class="card full-width">
+            <div class="card-header">
+              <h3>All Appointments</h3>
+              <button class="btn btn-primary">+ New Appointment</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>#001</td>
+                    <td>Jharyl Rufino</td>
+                    <td>Dr. Sarah Johnson</td>
+                    <td>2026-03-31</td>
+                    <td>10:30 AM</td>
+                    <td><span class="status completed">Completed</span></td>
+                    <td>
+                      <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                      <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>#002</td>
+                    <td>Kristine Villacarlos</td>
+                    <td>Dr. Michael Chen</td>
+                    <td>2026-04-4</td>
+                    <td>2:15 PM</td>
+                    <td><span class="status pending">Pending</span></td>
+                    <td>
+                      <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                      <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                      <td>
+                        <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                        <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                      </td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="patients" class="content-panel">
+        <div class="content-row">
+          <div class="card full-width">
+            <div class="card-header">
+              <h3>Patient Management (2-Total)</h3>
+              <div class="header-actions">
+                <div class="search-box">
+                  <i class="fas fa-search"></i>
+                  <input type="text" placeholder="Search patients by name, ID, or phone...">
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Last Visit</th>
+                    <th>Visits</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>P001</td>
+                    <td>clint pancho </td>
+                    <td>(555) 123-4567</td>
+                    <td>clint@gmail.com</td>
+                    <td>2026-04-1</td>
+                    <td>12</td>
+                    <td>
+                      <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                      <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>P002</td>
+                    <td>Sam Sotis</td>
+                    <td>(555) 987-6543</td>
+                    <td>sotis@gmail.com</td>
+                    <td>2026-04-1</td>
+                    <td>8</td>
+                    <td>
+                      <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                      <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+     <section id="services" class="content-panel">
+  <div class="content-row">
+    <div class="card full-width">
+      <div class="card-header">
+        <h3>Healthcare Offerings (15 Services)</h3>
+        <button class="btn btn-primary">+ Add New Offering</button>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <i class="fas fa-tooth"></i>
+          <h4>Oral Examination</h4>
+          <p>Thorough teeth inspection and polishing</p>
+          <div class="service-price">$85</div>
+        </div>
+        <div class="service-card">
+          <i class="fas fa-heart"></i>
+          <h4>Immunization</h4>
+          <p>Cardiac wellness assessment and EKG</p>
+          <div class="service-price">$120</div>
+        </div>
+        <div class="service-card">
+          <i class="fas fa-lungs"></i>
+          <h4>Hypertension Screening</h4>
+          <p>Pulmonary capacity evaluation and review</p>
+          <div class="service-price">$95</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+      <section id="reports" class="content-panel">
+        <div class="content-row">
+          <div class="stats-grid">
+            <div class="stat-card primary">
+              <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+              <div>
+                <div class="stat-number">$42,500</div>
+                <div class="stat-label">This Month Revenue</div>
+              </div>
+            </div>
+            <div class="stat-card success">
+              <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+              <div>
+                <div class="stat-number">156</div>
+                <div class="stat-label">Appointments This Week</div>
+              </div>
+            </div>
+            <div class="stat-card warning">
+              <div class="stat-icon"><i class="fas fa-clock"></i></div>
+              <div>
+                <div class="stat-number">92%</div>
+                <div class="stat-label">On-time Rate</div>
+              </div>
+            </div>
+            <div class="stat-card danger">
+              <div class="stat-icon"><i class="fas fa-users"></i></div>
+              <div>
+                <div class="stat-number">89%</div>
+                <div class="stat-label">Patient Satisfaction</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card full-width">
+            <div class="card-header">
+              <h3>Reports & Analytics</h3>
+            </div>
+            <div class="reports-placeholder">
+              <div class="chart-placeholder">
+                <i class="fas fa-chart-bar fa-3x"></i>
+                <p>Revenue trends and analytics charts will appear here</p>
+              </div>
+              <div class="chart-placeholder">
+                <i class="fas fa-chart-pie fa-3x"></i>
+                <p>Patient demographics and service usage</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</body>
+</html>
