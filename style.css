@@ -12,7 +12,7 @@
   position: relative;
   min-height: 100vh;
   z-index: 0;
-  background-image: url("pexels-nicole-avagliano-1132392-2312040.jpg");
+  background: url('Copilot_20260408_122301.png');
   background-size: cover;      
   background-position: center;  
   background-repeat: no-repeat; 
@@ -33,7 +33,7 @@
   text-align: center;
   font-size: 2.5rem;
   font-weight: 400;
-  color: #fff;
+  color:black;
   
 }
 
@@ -85,11 +85,10 @@
 .content {
   flex-basis: 50%;
   padding: 3em 3em;
-  background: linear-gradient(135deg, rgba(0, 255, 255, 0.3), rgba(255, 2, 255, 0.3));
-  box-shadow: 2px 9px 49px -17 rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #00ffff, #ff02ff);
+  box-shadow: 2px 9px 49px -17px rgba(0, 0, 0, 0.1);
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
-  
 }
 
 h2 {
@@ -100,15 +99,14 @@ h2 {
 }
 
 .form-img {
-  flex-basis: 50%;
-  background: rgba(255, 255, 255, 0.30);
+  flex-basis: 50%;  
+  background: #ffff;
   background-size: cover;
   padding: 40px;
   border-top-right-radius: 8px;
-  border-bottom-right-radius: 1px;
+  border-bottom-right-radius: 8px;
   align-items: center;
   display: grid;
-  
 }
 
 .form-img img {
@@ -125,14 +123,16 @@ p {
 
 .btn,button,input{
   border-radius: 35px;
+  margin-bottom: 10px;
 }
+
 
 .btn:hover,button:hover{
   transition: 0.5s ease;
   background: #71017b;
   color: white;
   cursor: pointer;
-}
+} 
 
 a {
   text-decoration: none;
@@ -235,80 +235,6 @@ p .account a:hover {
 .back a:hover {
   background-color: #4e34b6;
   color: white;
-}
-
-/* ===== SMALL SOCIAL SECTION ===== */
-.social-section {
-  display: flex;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  padding: 12px 20px;
-  border-radius: 25px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  margin: 15px auto;
-  max-width: 190px;
-}
-
-.social-section:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-}
-
-.social-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  color: white;
-  font-size: 14px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Brand-specific gradients */
-.social-icon[href*="linkedin"] {
-  background: linear-gradient(45deg, #0077b5, #005582);
-}
-
-.social-icon[href*="linkedin"]:hover {
-  background: linear-gradient(45deg, #0077b5, #006699);
-  box-shadow: 0 8px 20px rgba(0, 119, 181, 0.4);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.social-icon[href*="github"] {
-  background: linear-gradient(45deg, #333, #24292e);
-}
-
-.social-icon[href*="github"]:hover {
-  background: linear-gradient(45deg, #24292e, #1a1f24);
-  box-shadow: 0 8px 20px rgba(36, 41, 46, 0.4);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.social-icon[href*="facebook"] {
-  background: linear-gradient(45deg, #1877f2, #0e5a8a);
-}
-
-.social-icon[href*="facebook"]:hover {
-  background: linear-gradient(45deg, #1877f2, #0e5a8a);
-  box-shadow: 0 8px 20px rgba(24, 119, 242, 0.4);
-  transform: translateY(-2px) scale(1.05);
-}
-
-.social-icon[href*="instagram"] {
-  background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-}
-
-.social-icon[href*="instagram"]:hover {
-  box-shadow: 0 8px 20px rgba(225, 48, 108, 0.4);
-  transform: translateY(-2px) scale(1.08) rotate(3deg);
 }
 
 /* Responsive for small screens */
