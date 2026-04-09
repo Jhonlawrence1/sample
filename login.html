@@ -15,16 +15,17 @@
       <div class="main">
         <div class="content">
           <h2>Login</h2>
-          <form action="admindashboard.html" method="get">
-            <input type="text" name="username" pattern="admin" placeholder="Username" required title="Username must be 'admin'">
-            <input type="password" name="password" pattern="123" placeholder="Password" required title="Password must be '123'">
+          <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
             <button class="btn login-btn" type="submit">Login</button>
-            <button class="btn forget-btn" type="button" onclick="window.location.href='signup.html'">Forget Password</button>
+            <div id="loginMessage" style="color: red; margin-top: 10px;"></div>
           </form>
-          <p class="account">Don't have an account? <a href="signup.html">Sign up</a></p>
+          <button class="btn forget-btn" onclick="window.location.href='signup.html'">Sign Up</button>
           <div class="back">
             <a href="index.html">Back to home</a>
           </div>
+          <p>Default: admin / 123</p>
         </div>
         <div class="form-img">
           <img src="Copilot_20260329_204040.png" alt="Health Center">
@@ -32,5 +33,33 @@
       </div>
     </div>
   </div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  const messageEl = document.getElementById('loginMessage');
+
+  try {
+    const response = await fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      // Store sessionId (simple localStorage for demo)
+      localStorage.setItem('sessionId', data.sessionId);
+      window.location.href = 'admindashboard.html';
+    } else {
+      messageEl.textContent = data.message || 'Login failed';
+    }
+  } catch (err) {
+    messageEl.textContent = 'Server not running. Start with: npm run dev';
+  }
+});
+</script>
 </body>
 </html>

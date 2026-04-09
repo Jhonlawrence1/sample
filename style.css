@@ -12,7 +12,7 @@
   position: relative;
   min-height: 100vh;
   z-index: 0;
-  background: url('Copilot_20260408_122301.png');
+  background: linear-gradient(135deg,#fff8f8, #199854);
   background-size: cover;      
   background-position: center;  
   background-repeat: no-repeat; 
@@ -89,6 +89,7 @@
   box-shadow: 2px 9px 49px -17px rgba(0, 0, 0, 0.1);
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
+  text-align: center;
 }
 
 h2 {
@@ -213,6 +214,35 @@ p .account a:hover {
     border-radius: 0;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-form h1 {
+    font-size: 1.8rem;
+  }
+  
+  .content {
+    padding: 2em 1.5em;
+  }
+  
+  .form-img {
+    padding: 30px 20px;
+  }
+  
+  .login-form input {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+  
+  .login-form button {
+    padding: 12px;
+    font-size: 16px;
+  }
+  
+  .back a {
+    padding: 6px 12px;
+    font-size: 13px;
   }
 }
 

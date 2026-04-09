@@ -1,0 +1,5 @@
+node_modules/
+healthcenter.db
+*.log
+.DS_Store
+.vscode/

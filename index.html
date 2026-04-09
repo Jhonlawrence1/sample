@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Barangay Health Center</title>
   <link rel="stylesheet" href="homepage.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVm+TWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="icon" type="image/png" href="Copilot_20260329_121355 copy.png">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -15,16 +16,57 @@
      <img src="Copilot_20260329_121355.png" alt="Barangay Health Center Logo">
       <span class="nav-logo-text">BARANGAY HEALTH CENTER</span>
     </div>
-
-    <ul class="nav-links">
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul class="nav-links" id="navLinks">
       <li><a href="#home">Home</a></li>
       <li><a href="#about">About us</a></li>
       <li><a href="#services">Services</a></li>
-      <li><a href="#appointment">Appoinment</a></li>
+      <li><a href="#appointment">Appointment</a></li>
       <li><a href="#contact">Contact us</a></li>
       <li><a href="login.html">Admin</a></li>
     </ul>
   </nav>
+
+  <script>
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('active');
+  }
+  
+  // Set minimum date to today (Philippines time)
+  document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('appDate');
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' });
+    dateInput.setAttribute('min', today);
+    dateInput.value = today;
+  });
+  
+  // Load doctors when service is selected
+  async function loadDoctorsForService() {
+    const service = document.getElementById('appService').value;
+    const doctorSelect = document.getElementById('appDoctor');
+    doctorSelect.innerHTML = '<option value="">Loading...</option>';
+    
+    try {
+      const response = await fetch('http://localhost:3000/api/doctors');
+      const doctors = await response.json();
+      
+      doctorSelect.innerHTML = '<option value="">Any Doctor</option>';
+      if (doctors.length > 0) {
+        doctors.forEach(doc => {
+          doctorSelect.innerHTML += `<option value="${doc.id}">${doc.name}</option>`;
+        });
+      } else {
+        doctorSelect.innerHTML = '<option value="">No doctors available</option>';
+      }
+    } catch (e) {
+      doctorSelect.innerHTML = '<option value="">Error loading doctors</option>';
+    }
+  }
+  </script>
 
 
   <section id="home">
@@ -129,23 +171,37 @@
             <input type="number" id="appAge" placeholder="Enter your age" min="1" max="120" required />
           </div>
           <div class="form-group">
+            <label>Phone Number*</label>
+            <input type="tel" id="appPhone" placeholder="Enter your phone number" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address*</label>
+            <input type="email" id="appEmail" placeholder="Enter your email address" required />
+          </div>
+          <div class="form-group">
             <label>Complete Address *</label>
             <input type="text" id="appAddress" placeholder="Enter your address" required />
           </div>
           <div class="form-group">
             <label>Service Required *</label>
-            <select id="appService" required>
+            <select id="appService" required onchange="loadDoctorsForService()">
               <option value="" disabled selected>Select a Service</option>
               <option value="General Check-up">General Check-up</option>
               <option value="Vaccination">Vaccination</option>
               <option value="Blood Pressure">Blood Pressure</option>
             </select>
           </div>
+          <div class="form-group">
+            <label>Select Doctor (Optional)</label>
+            <select id="appDoctor">
+              <option value="">Any Doctor</option>
+            </select>
+          </div>
         </div>
         <div class="form-bottom">
           <div class="form-group">
            <label>Preferred Date *</label>
-              <input type="date" id="appDate" required min="today" />
+              <input type="date" id="appDate" required />
           </div>
           <div class="form-group">
             <label>Preferred Time *</label>
@@ -155,7 +211,7 @@
             <label>Additional Information*</label>
             <textarea id="appInfo" placeholder="Any additional information or symptoms..."></textarea>
           </div>
-          <button type="button" class="submit-btn">Book Appointment</button>
+          <button type="button" class="submit-btn" onclick="submitAppointment()">Book Appointment</button>
         </div>
       </div>
     </div>
@@ -201,5 +257,107 @@
     &copy; 2026 Barangay Health Center. All rights reserved.
   </footer>
   
+  <script>
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('active');
+  }
+
+  async function submitAppointment() {
+    const name = document.getElementById('appName').value;
+    const age = document.getElementById('appAge').value;
+    const phone = document.getElementById('appPhone').value;
+    const email = document.getElementById('appEmail').value;
+    const address = document.getElementById('appAddress').value;
+    const service = document.getElementById('appService').value;
+    const doctor_id = document.getElementById('appDoctor').value;
+    const date = document.getElementById('appDate').value;
+    const time = document.getElementById('appTime').value;
+    const additionalInfo = document.getElementById('appInfo').value;
+
+    if (!name || !age || !phone || !email || !address || !service || !date || !time) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3000/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name, age, phone, email, address, service, doctor_id: doctor_id || null, date, time, additional_info: additionalInfo
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Send confirmation email via EmailJS
+        (function() {
+          emailjs.init("f0TdirvOBKaPBM-Os"); // Replace with your EmailJS Public Key
+        })();
+        
+        // Get doctor name
+        const doctorSelect = document.getElementById('appDoctor');
+        const doctorName = doctorSelect.options[doctorSelect.selectedIndex]?.text || "Any Doctor";
+        
+        const templateParams = {
+          to_name: name,
+          to_email: email,
+          service: service,
+          doctor_name: doctorName,
+          date: date,
+          time: time,
+          address: address,
+          patient_name: name,
+          patient_phone: phone,
+          patient_email: email
+        };
+        
+        // Send confirmation to patient
+        emailjs.send("service_yxid4bf", "template_w6284fi", templateParams)
+          .then(function(response) {
+            console.log('Patient email sent!', response.status);
+          }, function(error) {
+            console.log('Patient email failed:', error);
+          });
+        
+        // Send notification to admin - use same template but different params
+        const adminParams = {
+          to_name: "Admin - New Booking",
+          to_email: "healthcenter@he.gov.ph",
+          service: service,
+          doctor_name: doctorName,
+          date: date,
+          time: time,
+          address: address,
+          patient_name: name,
+          patient_phone: phone,
+          patient_email: email
+        };
+        
+        emailjs.send("service_yxid4bf", "template_w6284fi", adminParams)
+          .then(function(response) {
+            console.log('Admin notification sent!', response.status);
+          }, function(error) {
+            console.log('Admin notification failed:', error);
+          });
+        
+        alert('Appointment booked successfully! A confirmation email has been sent to ' + email);
+        document.querySelector('.appointment-form-wrapper').reset();
+      } else {
+        alert('Error: ' + (data.error || 'Failed to book appointment'));
+      }
+    } catch (error) {
+      alert('Error: Could not connect to server. Make sure the server is running.');
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.getAttribute('href').startsWith('#')) {
+      document.getElementById('navLinks').classList.remove('active');
+    }
+  });
+  </script>
+   
 </body>
 </html>

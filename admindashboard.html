@@ -1,328 +1,875 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BHC Admin Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - Barangay Health Center</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <link rel="icon" type="image/png" href="Copilot_20260329_121355 copy.png">
   <link rel="stylesheet" href="admin-dashboard.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-   <link rel="icon" type="image/png" href="Copilot_20260329_121355 copy.png">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+.modal-content { background-color: #fff; margin: 5% auto; padding: 30px; border-radius: 12px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; position: relative; }
+.close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; right: 15px; top: 15px; }
+.close:hover { color: #333; }
+.status-select, .doctor-select { padding: 8px; border: 1px solid #ddd; border-radius: 6px; margin-left: 10px; min-width: 150px; }
+.modal-details { margin: 15px 0; }
+.modal-details p { margin: 8px 0; padding: 8px 0; border-bottom: 1px solid #eee; }
+.modal-details strong { color: #667eea; }
+.realtime-indicator { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #28a745; margin-left: 8px; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+.form-group-modal { margin-bottom: 15px; }
+.form-group-modal label { display: block; margin-bottom: 5px; font-weight: 600; }
+.form-group-modal input, .form-group-modal select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
+@media (max-width: 480px) {
+  .modal-content { margin: 10% auto; padding: 20px; width: 95%; }
+  .status-select, .doctor-select { width: 100%; margin-left: 0; margin-top: 5px; }
+}
+  </style>
 </head>
 <body>
-
-  <input type="checkbox" id="mobile-menu-toggle" class="menu-toggle-input">
-
-
-  <div class="sidebar-overlay"></div>
-  <div class="sidebar">
+  <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+  <div class="mobile-menu-overlay" onclick="toggleSidebar()"></div>
+  
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <div class="logo">
-        <i class="fas fa-heartbeat"></i>
-        <span>BHC Admin</span>
+      <div class="nav-logo">
+        <img src="Copilot_20260329_121355.png" alt="Logo">
+        <span class="nav-logo-text">Admin Panel</span>
       </div>
     </div>
+    <ul class="sidebar-menu">
+      <li><a href="#" class="nav-link active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+      <li><a href="#" class="nav-link" data-section="appointments"><i class="fas fa-calendar-check"></i> Appointments</a></li>
+      <li><a href="#" class="nav-link" data-section="patients"><i class="fas fa-users"></i> Patients</a></li>
+      <li><a href="#" class="nav-link" data-section="doctors"><i class="fas fa-user-md"></i> Doctors</a></li>
+      <li><a href="#" class="nav-link" data-section="staff"><i class="fas fa-user-nurse"></i> Staff</a></li>
+      <li><a href="#" class="nav-link" data-section="services"><i class="fas fa-stethoscope"></i> Services</a></li>
+      <li><a href="index.html" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+    </ul>
+  </aside>
 
-  <ul class="nav-menu" id="navMenu">
-  <li><a href="#dashboard" class="nav-item active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-  <li><a href="#appointments" class="nav-item"><i class="fas fa-calendar-check"></i> Appointments</a></li>
-  <li><a href="#patients" class="nav-item"><i class="fas fa-users"></i> Patients</a></li>
-  <li><a href="#services" class="nav-item"><i class="fas fa-clinic-medical"></i> Services</a></li>
-  <li><a href="#reports" class="nav-item"><i class="fas fa-chart-bar"></i> Reports</a></li>
-</ul>
-
-    <div class="logout">
-      <a href="index.html">
-        <i class="fas fa-sign-out-alt"></i>
-        <span>Logout</span>
-      </a>
-    </div>
-  </div>
-
-<button class="menu-toggle">
-  <label for="mobile-menu-toggle" class="mobile-menu-btn">
-    <span></span>
-    <span></span>
-    <span></span>
-  </label>
-</button>
-
-  <div class="main-content">
-    <div class="topbar">
-      <div style="display: flex; gap: 16px;">
-        <h1>Dashboard</h1>
-      </div>
-      <div class="profile">
-        <div class="profile-avatar"></div>
+  <main class="main-content">
+    <div class="header">
+      <h1 id="pageTitle">Dashboard <span class="realtime-indicator" id="realtimeDot"></span></h1>
+      <div class="user-profile">
+        <div class="user-avatar">A</div>
         <span>Admin</span>
       </div>
     </div>
 
-    <div class="content-section">
-      <section id="dashboard" class="content-panel">
-        <div class="stats-grid">
-          <div class="stat-card primary">
-            <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
-            <div>
-              <div class="stat-number">47</div>
-              <div class="stat-label">Today's Appointments</div>
-              <div class="stat-change positive">+12% from yesterday</div>
-            </div>
-          </div>
-          <div class="stat-card success">
-            <div class="stat-icon"><i class="fas fa-users"></i></div>
-            <div>
-              <div class="stat-number">1,247</div>
-              <div class="stat-label">Total Patients</div>
-              <div class="stat-change positive">+8% this month</div>
-            </div>
-          </div>
-          <div class="stat-card warning">
-            <div class="stat-icon"><i class="fas fa-user-md"></i></div>
-            <div>
-              <div class="stat-number">23</div>
-              <div class="stat-label">Active Doctors</div>
-              <div class="stat-change neutral">Stable</div>
-            </div>
-          </div>
-          <div class="stat-card danger">
-            <div class="stat-icon"><i class="fas fa-file-medical"></i></div>
-            <div>
-              <div class="stat-number">$14,750</div>
-              <div class="stat-label">Monthly Revenue</div>
-              <div class="stat-change positive">+15% from last month</div>
-            </div>
-          </div>
+    <!-- Dashboard Section -->
+    <div class="content-section active" id="dashboard">
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="stat-icon patients"><i class="fas fa-users"></i></div>
+          <div class="stat-number" id="statPatients">0</div>
+          <div class="stat-label">Total Patients</div>
         </div>
-
-        <div class="content-row">
-          <div class="card">
-            <div class="card-header">
-              <h3>Recent Appointments</h3>
-              <a href="#appointments" class="view-all">View All →</a>
-            </div>
-            <div class="table-responsive">
-              <table class="activity-table">
-                <thead>
-                  <tr>
-                    <th>Patient</th>
-                    <th>Doctor</th>
-                    <th>Time</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Jharyl Rufino</td>
-                    <td>Dr. Sarah Johnson</td>
-                    <td>10:30 AM</td>
-                    <td><span class="status completed">Completed</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          </div>
+        <div class="stat-card">
+          <div class="stat-icon appointments"><i class="fas fa-calendar-check"></i></div>
+          <div class="stat-number" id="statAppointments">0</div>
+          <div class="stat-label">Appointments</div>
         </div>
-      </section>
-
-      <section id="appointments" class="content-panel">
-        <div class="content-row">
-          <div class="card full-width">
-            <div class="card-header">
-              <h3>All Appointments</h3>
-              <button class="btn btn-primary">+ New Appointment</button>
-            </div>
-            <div class="table-responsive">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Patient Name</th>
-                    <th>Doctor</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>#001</td>
-                    <td>Jharyl Rufino</td>
-                    <td>Dr. Sarah Johnson</td>
-                    <td>2026-03-31</td>
-                    <td>10:30 AM</td>
-                    <td><span class="status completed">Completed</span></td>
-                    <td>
-                      <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                      <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>#002</td>
-                    <td>Kristine Villacarlos</td>
-                    <td>Dr. Michael Chen</td>
-                    <td>2026-04-4</td>
-                    <td>2:15 PM</td>
-                    <td><span class="status pending">Pending</span></td>
-                    <td>
-                      <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                      <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                      <td>
-                        <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                        <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                      </td>
-                    </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <div class="stat-card">
+          <div class="stat-icon services"><i class="fas fa-stethoscope"></i></div>
+          <div class="stat-number" id="statDoctors">0</div>
+          <div class="stat-label">Doctors</div>
         </div>
-      </section>
-
-      <section id="patients" class="content-panel">
-        <div class="content-row">
-          <div class="card full-width">
-            <div class="card-header">
-              <h3>Patient Management (2-Total)</h3>
-              <div class="header-actions">
-                <div class="search-box">
-                  <i class="fas fa-search"></i>
-                  <input type="text" placeholder="Search patients by name, ID, or phone...">
-                </div>
-              </div>
-            </div>
-            <div class="table-responsive">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Last Visit</th>
-                    <th>Visits</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>P001</td>
-                    <td>clint pancho </td>
-                    <td>(555) 123-4567</td>
-                    <td>clint@gmail.com</td>
-                    <td>2026-04-1</td>
-                    <td>12</td>
-                    <td>
-                      <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                      <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>P002</td>
-                    <td>Sam Sotis</td>
-                    <td>(555) 987-6543</td>
-                    <td>sotis@gmail.com</td>
-                    <td>2026-04-1</td>
-                    <td>8</td>
-                    <td>
-                      <button class="btn-icon"><i class="fas fa-eye"></i></button>
-                      <button class="btn-icon"><i class="fas fa-edit"></i></button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </section>
-
-     <section id="services" class="content-panel">
-  <div class="content-row">
-    <div class="card full-width">
-      <div class="card-header">
-        <h3>Healthcare Offerings (15 Services)</h3>
-        <button class="btn btn-primary">+ Add New Offering</button>
-      </div>
-      <div class="services-grid">
-        <div class="service-card">
-          <i class="fas fa-tooth"></i>
-          <h4>Oral Examination</h4>
-          <p>Thorough teeth inspection and polishing</p>
-          <div class="service-price">$85</div>
-        </div>
-        <div class="service-card">
-          <i class="fas fa-heart"></i>
-          <h4>Immunization</h4>
-          <p>Cardiac wellness assessment and EKG</p>
-          <div class="service-price">$120</div>
-        </div>
-        <div class="service-card">
-          <i class="fas fa-lungs"></i>
-          <h4>Hypertension Screening</h4>
-          <p>Pulmonary capacity evaluation and review</p>
-          <div class="service-price">$95</div>
+        <div class="stat-card">
+          <div class="stat-icon revenue"><i class="fas fa-check-circle"></i></div>
+          <div class="stat-number" id="statCompleted">0</div>
+          <div class="stat-label">Completed</div>
         </div>
       </div>
+      <h3>Quick Actions</h3>
+      <div class="quick-actions">
+        <a href="#" class="action-card" data-section="appointments">
+          <div class="action-icon"><i class="fas fa-plus"></i></div>
+          <h4>New Appointment</h4>
+          <p>Schedule a new patient appointment</p>
+        </a>
+        <a href="#" class="action-card" data-section="patients">
+          <div class="action-icon"><i class="fas fa-user-plus"></i></div>
+          <h4>Add Patient</h4>
+          <p>Register a new patient</p>
+        </a>
+        <a href="#" class="action-card" data-section="doctors">
+          <div class="action-icon"><i class="fas fa-user-md"></i></div>
+          <h4>Manage Doctors</h4>
+          <p>Add or edit doctors</p>
+        </a>
+      </div>
     </div>
-  </div>
-</section>
 
-      <section id="reports" class="content-panel">
-        <div class="content-row">
-          <div class="stats-grid">
-            <div class="stat-card primary">
-              <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
-              <div>
-                <div class="stat-number">$42,500</div>
-                <div class="stat-label">This Month Revenue</div>
-              </div>
-            </div>
-            <div class="stat-card success">
-              <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
-              <div>
-                <div class="stat-number">156</div>
-                <div class="stat-label">Appointments This Week</div>
-              </div>
-            </div>
-            <div class="stat-card warning">
-              <div class="stat-icon"><i class="fas fa-clock"></i></div>
-              <div>
-                <div class="stat-number">92%</div>
-                <div class="stat-label">On-time Rate</div>
-              </div>
-            </div>
-            <div class="stat-card danger">
-              <div class="stat-icon"><i class="fas fa-users"></i></div>
-              <div>
-                <div class="stat-number">89%</div>
-                <div class="stat-label">Patient Satisfaction</div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="card full-width">
-            <div class="card-header">
-              <h3>Reports & Analytics</h3>
-            </div>
-            <div class="reports-placeholder">
-              <div class="chart-placeholder">
-                <i class="fas fa-chart-bar fa-3x"></i>
-                <p>Revenue trends and analytics charts will appear here</p>
-              </div>
-              <div class="chart-placeholder">
-                <i class="fas fa-chart-pie fa-3x"></i>
-                <p>Patient demographics and service usage</p>
-              </div>
-            </div>
+    <!-- Appointments Section -->
+    <div class="content-section" id="appointments">
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Manage Appointments</h3>
+          <div class="page-actions">
+            <button class="btn-primary" onclick="refreshAppointments()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button class="btn-primary" onclick="exportAppointments()"><i class="fas fa-download"></i> Export</button>
           </div>
         </div>
-      </section>
+        <table>
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Service</th>
+              <th>Date & Time</th>
+              <th>Phone / Email</th>
+              <th>Doctor</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="appointmentsTbody">
+            <tr><td colspan="6"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
+    <!-- Patients Section -->
+    <div class="content-section" id="patients">
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Patient Records</h3>
+          <div class="page-actions">
+            <button class="btn-primary" onclick="openPatientModal()"><i class="fas fa-plus"></i> Add Patient</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Address</th>
+              <th>Phone</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="patientsTbody">
+            <tr><td colspan="5"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Doctors Section -->
+    <div class="content-section" id="doctors">
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Manage Doctors</h3>
+          <div class="page-actions">
+            <button class="btn-primary" onclick="openDoctorModal()"><i class="fas fa-plus"></i> Add Doctor</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="doctorsTbody">
+            <tr><td colspan="5"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Staff Section -->
+    <div class="content-section" id="staff">
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Manage Staff</h3>
+          <div class="page-actions">
+            <button class="btn-primary" onclick="openStaffModal()"><i class="fas fa-plus"></i> Add Staff</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="staffTbody">
+            <tr><td colspan="5"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="content-section" id="services">
+      <div class="table-container">
+        <div class="table-header">
+          <h3>Services Offered</h3>
+          <div class="page-actions">
+            <button class="btn-primary" onclick="openServiceModal()"><i class="fas fa-plus"></i> Add Service</button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="servicesTbody">
+            <tr><td colspan="4"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Appointment Details Modal -->
+  <div id="appointmentModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('appointmentModal')">&times;</span>
+      <h2 id="modalTitle">Appointment Details</h2>
+      <div class="modal-details" id="modalBody"></div>
+      <div class="form-group-modal">
+        <label>Assign Doctor:</label>
+        <select id="doctorSelect" class="doctor-select">
+          <option value="">-- Select Doctor --</option>
+        </select>
+      </div>
+      <div class="form-group-modal">
+        <label>Status:</label>
+        <select id="statusSelect" class="status-select">
+          <option value="Pending">Pending</option>
+          <option value="Confirmed">Confirmed</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="updateAppointment()">Update Appointment</button>
     </div>
   </div>
+
+  <!-- Add/Edit Doctor Modal -->
+  <div id="doctorModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('doctorModal')">&times;</span>
+      <h2 id="doctorModalTitle">Add Doctor</h2>
+      <div class="form-group-modal">
+        <label>Name:</label>
+        <input type="text" id="doctorName" placeholder="Doctor's name">
+      </div>
+      <div class="form-group-modal">
+        <label>Role:</label>
+        <select id="doctorRole">
+          <option value="Doctor">Doctor</option>
+          <option value="Nurse">Nurse</option>
+          <option value="Midwife">Midwife</option>
+        </select>
+      </div>
+      <div class="form-group-modal">
+        <label>Phone:</label>
+        <input type="text" id="doctorPhone" placeholder="Phone number">
+      </div>
+      <button class="btn-primary" onclick="saveDoctor()">Save</button>
+    </div>
+  </div>
+
+  <!-- Add/Edit Staff Modal -->
+  <div id="staffModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('staffModal')">&times;</span>
+      <h2 id="staffModalTitle">Add Staff</h2>
+      <div class="form-group-modal">
+        <label>Name:</label>
+        <input type="text" id="staffName" placeholder="Staff name">
+      </div>
+      <div class="form-group-modal">
+        <label>Role:</label>
+        <select id="staffRole">
+          <option value="Nurse">Nurse</option>
+          <option value="Midwife">Midwife</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </div>
+      <div class="form-group-modal">
+        <label>Phone:</label>
+        <input type="text" id="staffPhone" placeholder="Phone number">
+      </div>
+      <button class="btn-primary" onclick="saveStaff()">Save</button>
+    </div>
+  </div>
+
+  <!-- Add Service Modal -->
+  <div id="serviceModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('serviceModal')">&times;</span>
+      <h2>Add Service</h2>
+      <div class="form-group-modal">
+        <label>Service Name:</label>
+        <input type="text" id="serviceName" placeholder="Service name">
+      </div>
+      <div class="form-group-modal">
+        <label>Description:</label>
+        <input type="text" id="serviceDesc" placeholder="Description">
+      </div>
+      <button class="btn-primary" onclick="saveService()">Save</button>
+    </div>
+  </div>
+
+  <!-- Add Patient Modal -->
+  <div id="patientModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('patientModal')">&times;</span>
+      <h2>Add Patient</h2>
+      <div class="form-group-modal">
+        <label>Name:</label>
+        <input type="text" id="patientName" placeholder="Patient name">
+      </div>
+      <div class="form-group-modal">
+        <label>Age:</label>
+        <input type="number" id="patientAge" placeholder="Age">
+      </div>
+      <div class="form-group-modal">
+        <label>Address:</label>
+        <input type="text" id="patientAddress" placeholder="Address">
+      </div>
+      <div class="form-group-modal">
+        <label>Phone:</label>
+        <input type="text" id="patientPhone" placeholder="Phone number">
+      </div>
+      <button class="btn-primary" onclick="savePatient()">Save</button>
+    </div>
+  </div>
+
+<script>
+let sessionId = localStorage.getItem('sessionId');
+if (!sessionId) window.location.href = 'login.html';
+
+let currentAppointmentId = null;
+let realtimeInterval;
+let currentEditId = null;
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('active');
+  document.querySelector('.mobile-menu-overlay').classList.toggle('active');
+}
+
+async function apiFetch(endpoint, options = {}) {
+  const config = {
+    headers: { 'Content-Type': 'application/json', 'Authorization': sessionId },
+    ...options
+  };
+  try {
+    const response = await fetch(`http://localhost:3000${endpoint}`, config);
+    if (response.status === 401) {
+      localStorage.removeItem('sessionId');
+      window.location.href = 'login.html';
+    }
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.error || 'Request failed' };
+    }
+    return data;
+  } catch (e) {
+    console.error('API Error:', e);
+    return { error: e.message };
+  }
+}
+
+// Navigation
+document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const section = link.dataset.section;
+    showSection(section);
+    toggleSidebar();
+  });
+});
+
+document.querySelectorAll('.action-card').forEach(card => {
+  card.addEventListener('click', (e) => {
+    e.preventDefault();
+    const section = card.dataset.section;
+    showSection(section);
+  });
+});
+
+function showSection(section) {
+  document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById(section).classList.add('active');
+  document.querySelector(`.nav-link[data-section="${section}"]`)?.classList.add('active');
+  document.getElementById('pageTitle').textContent = section.charAt(0).toUpperCase() + section.slice(1);
+  
+  if (section === 'appointments') loadAppointments();
+  if (section === 'patients') loadPatients();
+  if (section === 'doctors') loadDoctors();
+  if (section === 'staff') loadStaff();
+  if (section === 'services') loadServices();
+  if (section === 'dashboard') loadStats();
+}
+
+// Modal functions
+function closeModal(modalId) {
+  document.getElementById(modalId).style.display = 'none';
+}
+
+function openModal(modalId) {
+  document.getElementById(modalId).style.display = 'block';
+}
+
+// Stats
+async function loadStats() {
+  const stats = await apiFetch('/api/stats');
+  const doctors = await apiFetch('/api/doctors');
+  const appointments = await apiFetch('/api/appointments');
+  
+  console.log('Stats:', stats);
+  
+  document.getElementById('statPatients').textContent = stats.total_patients || 0;
+  document.getElementById('statAppointments').textContent = stats.total_appointments || 0;
+  document.getElementById('statDoctors').textContent = Array.isArray(doctors) ? doctors.length : 0;
+  document.getElementById('statCompleted').textContent = Array.isArray(appointments) ? appointments.filter(a => a.status === 'Completed').length : 0;
+}
+
+// Appointments
+async function loadAppointments() {
+  const appointments = await apiFetch('/api/appointments');
+  const tbody = document.getElementById('appointmentsTbody');
+  
+  console.log('Appointments loaded:', appointments);
+  
+  if (appointments.error) {
+    tbody.innerHTML = `<tr><td colspan="6" style="color:red;">Error: ${appointments.error}</td></tr>`;
+    return;
+  }
+  
+  if (!Array.isArray(appointments) || appointments.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6">No appointments found. Book an appointment from the homepage.</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = appointments.map(apt => `
+    <tr>
+      <td><strong>${apt.name}</strong><br><small>${apt.address}</small></td>
+      <td>${apt.service}</td>
+      <td>${apt.date}<br><small>${apt.time}</small></td>
+      <td>${apt.phone || '-'}<br><small>${apt.email || '-'}</small></td>
+      <td>${apt.doctor_name || '<span style="color:#999;">Unassigned</span>'}</td>
+      <td><span class="status ${(apt.status || 'pending').toLowerCase()}">${apt.status || 'Pending'}</span></td>
+      <td>
+        <button class="action-btn btn-view" onclick="viewAppointment(${apt.id})"><i class="fas fa-eye"></i></button>
+        <button class="action-btn btn-edit" onclick="deleteAppointment(${apt.id})"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('');
+  
+  startRealtime();
+}
+
+function viewAppointment(id) {
+  currentAppointmentId = id;
+  apiFetch('/api/appointments').then(appointments => {
+    const apt = appointments.find(a => a.id === id);
+    if (!apt) return;
+    
+    document.getElementById('modalTitle').textContent = `Appointment: ${apt.name}`;
+    document.getElementById('modalBody').innerHTML = `
+      <p><strong>Name:</strong> ${apt.name}</p>
+      <p><strong>Age:</strong> ${apt.age}</p>
+      <p><strong>Phone:</strong> ${apt.phone || 'N/A'}</p>
+      <p><strong>Email:</strong> ${apt.email || 'N/A'}</p>
+      <p><strong>Address:</strong> ${apt.address}</p>
+      <p><strong>Service:</strong> ${apt.service}</p>
+      <p><strong>Date:</strong> ${apt.date}</p>
+      <p><strong>Time:</strong> ${apt.time}</p>
+      <p><strong>Additional Info:</strong> ${apt.additional_info || 'None'}</p>
+    `;
+    
+    document.getElementById('statusSelect').value = apt.status || 'Pending';
+    
+    // Load doctors for selection
+    apiFetch('/api/doctors').then(doctors => {
+      const select = document.getElementById('doctorSelect');
+      select.innerHTML = '<option value="">-- Select Doctor --</option>' + 
+        doctors.map(d => `<option value="${d.id}" ${d.id === apt.doctor_id ? 'selected' : ''}>${d.name}</option>`).join('');
+    });
+    
+    openModal('appointmentModal');
+  });
+}
+
+async function updateAppointment() {
+  const status = document.getElementById('statusSelect').value;
+  const doctor_id = document.getElementById('doctorSelect').value;
+  
+  // Get current appointment details for email
+  const appointments = await apiFetch('/api/appointments');
+  const apt = appointments.find(a => a.id === currentAppointmentId);
+  
+  await apiFetch(`/api/appointments/${currentAppointmentId}`, {
+    method: 'PUT',
+    body: JSON.stringify({ status, doctor_id: doctor_id || null })
+  });
+  
+  // Send status update email to patient
+  if (apt && apt.email) {
+    (function() {
+      emailjs.init("f0TdirvOBKaPBM-Os");
+    })();
+    
+    let statusMessage = "";
+    if (status === "Confirmed") {
+      statusMessage = "Your appointment has been CONFIRMED. Please arrive on time.";
+    } else if (status === "Completed") {
+      statusMessage = "Your appointment has been COMPLETED. Thank you for visiting!";
+    } else if (status === "Cancelled") {
+      statusMessage = "Your appointment has been CANCELLED. Please rebook if needed.";
+    } else {
+      statusMessage = "Your appointment status is: " + status;
+    }
+    
+    const emailParams = {
+      to_name: apt.name,
+      to_email: apt.email,
+      service: apt.service,
+      doctor_name: apt.doctor_name || "Not assigned",
+      date: apt.date,
+      time: apt.time,
+      address: apt.address,
+      patient_name: apt.name,
+      patient_phone: apt.phone,
+      patient_email: apt.email,
+      status: status,
+      status_message: statusMessage
+    };
+    
+    emailjs.send("service_yxid4bf", "template_w6284fi", emailParams)
+      .then(function(response) {
+        console.log('Status email sent!', response.status);
+      }, function(error) {
+        console.log('Status email failed:', error);
+      });
+  }
+  
+  closeModal('appointmentModal');
+  loadAppointments();
+  alert('Appointment updated! Patient has been notified via email.');
+}
+
+async function deleteAppointment(id) {
+  if (confirm('Are you sure you want to delete this appointment?')) {
+    await apiFetch(`/api/appointments/${id}`, { method: 'DELETE' });
+    loadAppointments();
+  }
+}
+
+function refreshAppointments() {
+  loadAppointments();
+}
+
+function exportAppointments() {
+  apiFetch('/api/appointments').then(appointments => {
+    let csv = 'Name,Age,Address,Service,Date,Time,Status,Doctor\n';
+    appointments.forEach(apt => {
+      csv += `"${apt.name}",${apt.age},"${apt.address}","${apt.service}","${apt.date}","${apt.time}","${apt.status}","${apt.doctor_name || ''}"\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'appointments.csv';
+    a.click();
+  });
+}
+
+// Doctors
+async function loadDoctors() {
+  const doctors = await apiFetch('/api/staff');
+  const tbody = document.getElementById('doctorsTbody');
+  const doctorList = doctors.filter(s => s.role === 'Doctor');
+  
+  tbody.innerHTML = doctorList.map(d => `
+    <tr>
+      <td>${d.name}</td>
+      <td>${d.role}</td>
+      <td>${d.phone || '-'}</td>
+      <td><span class="status ${d.status || 'active'}">${d.status || 'Active'}</span></td>
+      <td>
+        <button class="action-btn btn-edit" onclick="editDoctor(${d.id}, '${d.name}', '${d.role}', '${d.phone}')"><i class="fas fa-edit"></i></button>
+        <button class="action-btn btn-delete" onclick="deleteStaff(${d.id})"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="5">No doctors found</td></tr>';
+}
+
+function openDoctorModal() {
+  currentEditId = null;
+  document.getElementById('doctorModalTitle').textContent = 'Add Doctor';
+  document.getElementById('doctorName').value = '';
+  document.getElementById('doctorRole').value = 'Doctor';
+  document.getElementById('doctorPhone').value = '';
+  openModal('doctorModal');
+}
+
+function editDoctor(id, name, role, phone) {
+  currentEditId = id;
+  document.getElementById('doctorModalTitle').textContent = 'Edit Doctor';
+  document.getElementById('doctorName').value = name;
+  document.getElementById('doctorRole').value = role;
+  document.getElementById('doctorPhone').value = phone || '';
+  openModal('doctorModal');
+}
+
+async function saveDoctor() {
+  const name = document.getElementById('doctorName').value;
+  const role = document.getElementById('doctorRole').value;
+  const phone = document.getElementById('doctorPhone').value;
+  
+  if (!name) return alert('Please enter name');
+  
+  if (currentEditId) {
+    await apiFetch(`/api/staff/${currentEditId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name, role, phone })
+    });
+  } else {
+    await apiFetch('/api/staff', {
+      method: 'POST',
+      body: JSON.stringify({ name, role, phone })
+    });
+  }
+  
+  closeModal('doctorModal');
+  loadDoctors();
+}
+
+// Staff
+async function loadStaff() {
+  const staff = await apiFetch('/api/staff');
+  const tbody = document.getElementById('staffTbody');
+  const staffList = staff.filter(s => s.role !== 'Doctor');
+  
+  tbody.innerHTML = staffList.map(s => `
+    <tr>
+      <td>${s.name}</td>
+      <td>${s.role}</td>
+      <td>${s.phone || '-'}</td>
+      <td><span class="status ${s.status || 'active'}">${s.status || 'Active'}</span></td>
+      <td>
+        <button class="action-btn btn-edit" onclick="editStaff(${s.id}, '${s.name}', '${s.role}', '${s.phone}')"><i class="fas fa-edit"></i></button>
+        <button class="action-btn btn-delete" onclick="deleteStaff(${s.id})"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="5">No staff found</td></tr>';
+}
+
+function openStaffModal() {
+  currentEditId = null;
+  document.getElementById('staffModalTitle').textContent = 'Add Staff';
+  document.getElementById('staffName').value = '';
+  document.getElementById('staffRole').value = 'Nurse';
+  document.getElementById('staffPhone').value = '';
+  openModal('staffModal');
+}
+
+function editStaff(id, name, role, phone) {
+  currentEditId = id;
+  document.getElementById('staffModalTitle').textContent = 'Edit Staff';
+  document.getElementById('staffName').value = name;
+  document.getElementById('staffRole').value = role;
+  document.getElementById('staffPhone').value = phone || '';
+  openModal('staffModal');
+}
+
+async function saveStaff() {
+  const name = document.getElementById('staffName').value;
+  const role = document.getElementById('staffRole').value;
+  const phone = document.getElementById('staffPhone').value;
+  
+  if (!name) return alert('Please enter name');
+  
+  if (currentEditId) {
+    await apiFetch(`/api/staff/${currentEditId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name, role, phone })
+    });
+  } else {
+    await apiFetch('/api/staff', {
+      method: 'POST',
+      body: JSON.stringify({ name, role, phone })
+    });
+  }
+  
+  closeModal('staffModal');
+  loadStaff();
+}
+
+async function deleteStaff(id) {
+  if (confirm('Are you sure you want to delete this staff member?')) {
+    await apiFetch(`/api/staff/${id}`, { method: 'DELETE' });
+    loadStaff();
+    loadDoctors();
+  }
+}
+
+// Services
+async function loadServices() {
+  const services = await apiFetch('/api/services');
+  const tbody = document.getElementById('servicesTbody');
+  
+  tbody.innerHTML = services.map(s => `
+    <tr>
+      <td>${s.name}</td>
+      <td>${s.description || '-'}</td>
+      <td><span class="status ${s.is_active ? 'active' : 'pending'}">${s.is_active ? 'Active' : 'Inactive'}</span></td>
+      <td>
+        <button class="action-btn btn-edit" onclick="editService(${s.id}, '${s.name}', '${s.description}')"><i class="fas fa-edit"></i></button>
+        <button class="action-btn btn-delete" onclick="deleteService(${s.id})"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="4">No services found</td></tr>';
+}
+
+function openServiceModal() {
+  currentEditId = null;
+  document.getElementById('serviceName').value = '';
+  document.getElementById('serviceDesc').value = '';
+  openModal('serviceModal');
+}
+
+function editService(id, name, desc) {
+  currentEditId = id;
+  document.getElementById('serviceName').value = name;
+  document.getElementById('serviceDesc').value = desc || '';
+  openModal('serviceModal');
+}
+
+async function saveService() {
+  const name = document.getElementById('serviceName').value;
+  const description = document.getElementById('serviceDesc').value;
+  
+  if (!name) return alert('Please enter service name');
+  
+  if (currentEditId) {
+    await apiFetch(`/api/services/${currentEditId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name, description })
+    });
+  } else {
+    await apiFetch('/api/services', {
+      method: 'POST',
+      body: JSON.stringify({ name, description })
+    });
+  }
+  
+  closeModal('serviceModal');
+  loadServices();
+}
+
+async function deleteService(id) {
+  if (confirm('Are you sure you want to delete this service?')) {
+    await apiFetch(`/api/services/${id}`, { method: 'DELETE' });
+    loadServices();
+  }
+}
+
+// Patients
+async function loadPatients() {
+  const patients = await apiFetch('/api/patients');
+  const tbody = document.getElementById('patientsTbody');
+  
+  tbody.innerHTML = patients.map(p => `
+    <tr>
+      <td>${p.name}</td>
+      <td>${p.age}</td>
+      <td>${p.address}</td>
+      <td>${p.phone || '-'}</td>
+      <td>
+        <button class="action-btn btn-edit" onclick="editPatient(${p.id}, '${p.name}', ${p.age}, '${p.address}', '${p.phone}')"><i class="fas fa-edit"></i></button>
+        <button class="action-btn btn-delete" onclick="deletePatient(${p.id})"><i class="fas fa-trash"></i></button>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="5">No patients found</td></tr>';
+}
+
+function openPatientModal() {
+  currentEditId = null;
+  document.getElementById('patientName').value = '';
+  document.getElementById('patientAge').value = '';
+  document.getElementById('patientAddress').value = '';
+  document.getElementById('patientPhone').value = '';
+  openModal('patientModal');
+}
+
+function editPatient(id, name, age, address, phone) {
+  currentEditId = id;
+  document.getElementById('patientName').value = name;
+  document.getElementById('patientAge').value = age;
+  document.getElementById('patientAddress').value = address;
+  document.getElementById('patientPhone').value = phone || '';
+  openModal('patientModal');
+}
+
+async function savePatient() {
+  const name = document.getElementById('patientName').value;
+  const age = document.getElementById('patientAge').value;
+  const address = document.getElementById('patientAddress').value;
+  const phone = document.getElementById('patientPhone').value;
+  
+  if (!name || !age || !address) return alert('Please fill required fields');
+  
+  if (currentEditId) {
+    await apiFetch(`/api/patients/${currentEditId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name, age, address, phone })
+    });
+  } else {
+    await apiFetch('/api/patients', {
+      method: 'POST',
+      body: JSON.stringify({ name, age, address, phone })
+    });
+  }
+  
+  closeModal('patientModal');
+  loadPatients();
+}
+
+async function deletePatient(id) {
+  if (confirm('Are you sure you want to delete this patient?')) {
+    await apiFetch(`/api/patients/${id}`, { method: 'DELETE' });
+    loadPatients();
+  }
+}
+
+// Real-time polling
+function startRealtime() {
+  if (realtimeInterval) clearInterval(realtimeInterval);
+  realtimeInterval = setInterval(() => {
+    const activeSection = document.querySelector('.content-section.active');
+    if (activeSection && activeSection.id === 'appointments') {
+      loadAppointments();
+      document.getElementById('realtimeDot').style.animationPlayState = 'running';
+    }
+  }, 5000);
+}
+
+// Add PUT endpoints for staff and patients in server
+loadStats();
+</script>
 </body>
 </html>
