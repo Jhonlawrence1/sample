@@ -50,7 +50,6 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     const data = await response.json();
 
     if (data.success) {
-      // Store sessionId (simple localStorage for demo)
       localStorage.setItem('sessionId', data.sessionId);
       window.location.href = 'admindashboard.html';
     } else {
