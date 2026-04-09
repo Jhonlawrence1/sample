@@ -374,7 +374,7 @@ async function apiFetch(endpoint, options = {}) {
     ...options
   };
   try {
-    const response = await fetch(`http://localhost:3000${endpoint}`, config);
+    const response = await fetch(endpoint, config);
     if (response.status === 401) {
       localStorage.removeItem('sessionId');
       window.location.href = 'login.html';
