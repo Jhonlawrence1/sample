@@ -227,7 +227,7 @@
                     </li>
                     <li class="contact-info">
                         <i class="fa-regular fa-envelope"></i>
-                        <p>healthcenter@he.gov.ph</p>
+                        <p>barangayhealthcenter29@gmail.com</p>
                     </li>
                     <li class="contact-info">
                         <i class="fa-solid fa-phone"></i>
@@ -244,11 +244,11 @@
                     </li>
                 </ul>
                 
-                <form action="#" class="contact-form">
-                    <input type="text" placeholder="Your name" class="form-input" required>
-                    <input type="email" placeholder="Your email" class="form-input" required>
-                    <textarea placeholder="Your message" class="form-input" required></textarea>
-                    <button class="submit-button">Submit</button>
+                <form class="contact-form" id="contactForm">
+                    <input type="text" id="contactName" placeholder="Your name" class="form-input" required>
+                    <input type="email" id="contactEmail" placeholder="Your email" class="form-input" required>
+                    <textarea id="contactMessage" placeholder="Your message" class="form-input" required></textarea>
+                    <button type="button" class="submit-button" onclick="submitContact()">Submit</button>
                 </form>
             </div>
         </section>
@@ -314,7 +314,7 @@
         };
         
         // Send confirmation to patient
-        emailjs.send("service_yxid4bf", "template_w6284fi", templateParams)
+        emailjs.send("service_yxid4bf", "template_8qte8er", templateParams)
           .then(function(response) {
             console.log('Patient email sent!', response.status);
           }, function(error) {
@@ -324,7 +324,7 @@
         // Send notification to admin - use same template but different params
         const adminParams = {
           to_name: "Admin - New Booking",
-          to_email: "healthcenter@he.gov.ph",
+          to_email: "barangayhealthcenter29@gmail.com",
           service: service,
           doctor_name: doctorName,
           date: date,
@@ -335,7 +335,7 @@
           patient_email: email
         };
         
-        emailjs.send("service_yxid4bf", "template_w6284fi", adminParams)
+        emailjs.send("service_yxid4bf", "template_8qte8er", adminParams)
           .then(function(response) {
             console.log('Admin notification sent!', response.status);
           }, function(error) {
@@ -357,6 +357,65 @@
       document.getElementById('navLinks').classList.remove('active');
     }
   });
+  
+  // Contact form submission
+  async function submitContact() {
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const message = document.getElementById('contactMessage').value;
+    
+    if (!name || !email || !message) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
+    // Send contact email via EmailJS
+    (function() {
+      emailjs.init("8LYuVrd7_FFYNfPH-");
+    })();
+    
+    // Send to admin
+    const adminParams = {
+      to_name: "Admin - Contact Form",
+      to_email: "barangayhealthcenter29@gmail.com",
+      from_name: name,
+      from_email: email,
+      message: message,
+      service: "Contact Us Form",
+      date: new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' }),
+      time: new Date().toLocaleTimeString('en-PH', { timeZone: 'Asia/Manila' })
+    };
+    
+    emailjs.send("service_vvtdj4e", "template_8qte8er", adminParams)
+      .then(function(response) {
+        console.log('Admin notification sent!', response.status);
+      }, function(error) {
+        console.log('Admin notification failed:', error);
+      });
+    
+    // Send confirmation to user
+    const userParams = {
+      to_name: name,
+      to_email: email,
+      from_name: "Barangay Health Center",
+      from_email: "barangayhealthcenter29@gmail.com",
+      message: "Thank you for contacting us! We have received your message and will get back to you soon.",
+      service: "Contact Us - Confirmation",
+      date: new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' }),
+      time: new Date().toLocaleTimeString('en-PH', { timeZone: 'Asia/Manila' })
+    };
+    
+    emailjs.send("service_vvtdj4e", "template_8qte8er", userParams)
+      .then(function(response) {
+        console.log('User confirmation sent!', response.status);
+        alert('Message sent successfully! Check your email for confirmation.');
+        document.getElementById('contactForm').reset();
+      }, function(error) {
+        console.log('User confirmation failed:', error);
+        alert('Message sent! We will get back to you soon.');
+        document.getElementById('contactForm').reset();
+      });
+  }
   </script>
    
 </body>
