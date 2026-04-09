@@ -51,7 +51,7 @@
     doctorSelect.innerHTML = '<option value="">Loading...</option>';
     
     try {
-      const response = await fetch('http://localhost:3000/api/doctors');
+      const response = await fetch('/api/doctors');
       const doctors = await response.json();
       
       doctorSelect.innerHTML = '<option value="">Any Doctor</option>';
@@ -279,7 +279,7 @@
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/appointments', {
+      const response = await fetch('/api/appointments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
