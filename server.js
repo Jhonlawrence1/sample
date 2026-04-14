@@ -239,10 +239,13 @@ app.post('/api/appointments', (req, res) => {
     function(err) {
       if (err) return res.status(500).json({ error: err.message });
       
+      console.log('=== SMS DEBUG === Phone:', phone, 'Username:', process.env.CLICKSEND_USERNAME ? 'SET' : 'MISSING', 'Key:', process.env.CLICKSEND_KEY ? 'SET' : 'MISSING');
       // Send SMS confirmation if phone provided and credentials set (direct API)
       if (phone && process.env.CLICKSEND_USERNAME && process.env.CLICKSEND_KEY) {
-        const toNum = phone.startsWith('+63') || phone.startsWith('0') ? phone : '+63' + phone.replace(/^\+?63/, '');
-        const message = `Barangay Health Center: Hi ${name}, your appointment for ${service} on ${date} at ${time} is confirmed. Address: ${address.slice(0,50)}...`;
+        const toNum = phone.match(/^(\+63|0)/) ? phone.replace(/^0/, '+63') : '+63' + phone;
+        console.log('Normalized phone:', toNum);
+        const message = `Hi ${name}, appointment ${service} ${date} ${time} confirmed. Addr: ${address.slice(0,40)}...`;
+        console.log('SMS text:', message);
         
         axios.post('https://api-eu.clicksend.com/rest/v3/sms/send', {
           messages: [{
@@ -257,12 +260,14 @@ app.post('/api/appointments', (req, res) => {
             password: process.env.CLICKSEND_KEY
           }
         }).then((response) => {
-          console.log('SMS sent successfully:', response.data);
+          console.log('SMS SUCCESS:', response.data);
         }).catch((error) => {
-          console.error('SMS send failed:', error.response?.data || error.message);
+          console.error('SMS ERROR:', error.response?.status, error.response?.data?.message || error.message);
         });
       } else if (phone) {
-        console.log('SMS skipped: missing credentials or invalid phone');
+        console.log('SMS skipped - no credentials');
+      } else {
+        console.log('No phone provided');
       }
       
       res.json({ id: this.lastID, message: 'Appointment booked successfully' });
