@@ -2,6 +2,9 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path');
+require('dotenv').config();
+const ClickSend = require('clicksend');
+
 
 const app = express();
 const PORT = process.env.PORT || process.env.RAILWAY_PORT || 3000;
@@ -235,6 +238,33 @@ app.post('/api/appointments', (req, res) => {
     [name, age, phone || '', email || '', address, service, doctor_id || null, date, time, additional_info || ''],
     function(err) {
       if (err) return res.status(500).json({ error: err.message });
+      
+      // Send SMS confirmation if phone provided and credentials set
+      if (phone && process.env.CLICKSEND_USERNAME && process.env.CLICKSEND_KEY) {
+        const sms = new ClickSend.SMSApi();
+        sms.configuration.username = process.env.CLICKSEND_USERNAME;
+        sms.configuration.apiKey = process.env.CLICKSEND_KEY;
+        
+        const message = `Barangay Health Center: Hi ${name}, your appointment for ${service} on ${date} at ${time} is confirmed. Address: ${address.slice(0,50)}...`;
+        
+        const smsMessage = new ClickSend.SmsMessage();
+        smsMessage.source = 'sdk';
+        smsMessage.from = 'BarangayHC';
+        smsMessage.to = phone.startsWith('+63') || phone.startsWith('0') ? phone : '+63' + phone.replace(/^\+?63/, '');
+        smsMessage.body = message;
+        
+        const messages = new ClickSend.SmsMessageArray();
+        messages.messages = [smsMessage];
+        
+        sms.smsAsync(messages).then((data) => {
+          console.log('SMS sent successfully:', data);
+        }).catch((error) => {
+          console.error('SMS send failed:', error);
+        });
+      } else if (phone) {
+        console.log('SMS skipped: missing credentials or invalid phone');
+      }
+      
       res.json({ id: this.lastID, message: 'Appointment booked successfully' });
     }
   );
